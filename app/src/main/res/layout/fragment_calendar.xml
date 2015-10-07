@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.yuanzhihao.roboticsclub.CalendarFragment">
+
+    <TextView
+        android:id="@+id/calendarCenter"
+        style="@style/main_bar_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp" />
+
+    <ImageButton
+        android:id="@+id/calendarLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:padding="8dp"
+        android:contentDescription="@null"
+        android:src="@drawable/calendar_month_left"
+        android:background="@null"/>
+
+    <ImageButton
+        android:id="@+id/calendarRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="8dp"
+        android:contentDescription="@null"
+        android:src="@drawable/calendar_month_right"
+        android:background="@null"/>
+
+    <com.yuanzhihao.roboticsclub.CalendarView
+        android:id="@+id/calendar_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/calendarCenter" />
+
+</RelativeLayout>
