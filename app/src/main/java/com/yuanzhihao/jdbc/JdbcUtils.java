@@ -73,6 +73,17 @@ public class JdbcUtils {
         }
     }
 
+    public ResultSet selectAllDate() {
+        connection=this.getConnection();
+        try {
+            preparedStatement = connection.prepareStatement("select date from calendar");
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
     public ResultSet selectUserByUsername(String username) {
         connection = this.getConnection();
         try {

@@ -3,8 +3,12 @@ package com.yuanzhihao.roboticsclub;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Calendar;
+import java.util.concurrent.ForkJoinPool;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -90,6 +94,8 @@ public class CalendarView extends View implements View.OnTouchListener {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        ForkJoinPool pool=new ForkJoinPool();
+        ArrayList<String> list=pool.invoke(new selectDateThread(getYearAndmonth()));
         Log.d(TAG, "onDraw");
         // 画框
         canvas.drawPath(surface.boxPath, surface.borderPaint);
@@ -139,8 +145,13 @@ public class CalendarView extends View implements View.OnTouchListener {
             } else if (isNextMonth(i)) {
                 color = surface.borderColor;
             }
-            if (todayIndex != -1 && i == todayIndex) {
+            //修改
+            else if (todayIndex != -1 && i == todayIndex) {
                 color = surface.todayNumberColor;
+            }
+            else {
+                if(list.contains(String.format("%02d",date[i])))
+                    color=surface.importantColor;
             }
             drawCellText(canvas, i, date[i] + "", color);
         }
@@ -428,6 +439,7 @@ public class CalendarView extends View implements View.OnTouchListener {
         public float borderWidth;
         public int bgColor = Color.parseColor("#FFFFFF");
         private int textColor = Color.BLACK;
+        private int importantColor=Color.YELLOW;
         private int textColorUnimportant = Color.parseColor("#666666");
         private int btnColor = Color.parseColor("#666666");
         private int borderColor = Color.parseColor("#CCCCCC");
