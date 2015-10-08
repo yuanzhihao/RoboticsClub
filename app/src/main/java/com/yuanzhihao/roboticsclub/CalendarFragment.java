@@ -3,6 +3,8 @@ package com.yuanzhihao.roboticsclub;
 
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,8 +83,6 @@ public class CalendarFragment extends Fragment {
         map.put("Oct","10");
         map.put("Nov","11");
         map.put("Dec","12");
-
-
     }
 
     @Override
@@ -122,8 +122,9 @@ public class CalendarFragment extends Fragment {
             onlyDate+="-"+map.get(DATE[1])+"-"+DATE[2];
             String identity=CalendarFragment.this.getActivity().getIntent().getStringExtra("identity");
             intent.putExtra("Date",onlyDate);
-            intent.putExtra("identity",identity);
+            intent.putExtra("identity", identity);
             startActivity(intent);
+            calendarView.invalidate();
         }
     }
 }

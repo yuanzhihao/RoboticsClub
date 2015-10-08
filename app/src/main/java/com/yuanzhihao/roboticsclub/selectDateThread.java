@@ -48,6 +48,7 @@ public class selectDateThread extends RecursiveTask<ArrayList> {
                 if(resultSet.getDate(1).toString().contains(newYearAndMonth))
                     list.add(resultSet.getDate(1).toString().split("-")[2]);
             }
+            jdbcUtils.releaseConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
