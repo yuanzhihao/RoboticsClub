@@ -39,4 +39,23 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/calendarCenter" />
 
+    <TextView
+        android:id="@+id/text1"
+        android:textColor="@color/yellow"
+        android:text="YELLOW-the day has activities"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/calendar_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"/>
+
+    <TextView
+        android:textColor="@color/colorAccent"
+        android:text="RED-the current day"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"/>
+
 </RelativeLayout>

@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import java.util.ArrayList;
+import android.content.Intent;
 
 
 /**
@@ -154,16 +155,16 @@ public class UserFragment extends Fragment implements SelectThread.ThreadListene
     private Toolbar.OnMenuItemClickListener onMenuItemClickListener = new Toolbar.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            String msg="";
             switch (item.getItemId()) {
                 case R.id.action_add:
-                    msg+="click add";
+                    Intent intent=new Intent(getActivity(),AddUserActivity.class);
+                    startActivity(intent);
                     break;
                 case R.id.action_logout:
-                    msg+="click logout";
+
                     break;
                 case R.id.action_help:
-                    msg+="click help";
+
                     break;
             }
             return true;
