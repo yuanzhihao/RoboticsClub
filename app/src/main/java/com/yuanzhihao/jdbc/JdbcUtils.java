@@ -23,7 +23,7 @@ public class JdbcUtils {
     private final String driver = "com.mysql.jdbc.Driver";
 
     //数据库地址
-    private final String url = "jdbc:mysql://172.31.239.32:3306/robotics_club";
+    private final String url = "jdbc:mysql://172.31.218.4:3306/robotics_club";
 
     //数据库的连接
     Connection connection;
