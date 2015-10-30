@@ -8,9 +8,12 @@ import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -48,6 +51,8 @@ public class BasicFragment extends Fragment {
 
     private Spinner spinner;
 
+    private String i;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -73,6 +78,7 @@ public class BasicFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -93,6 +99,17 @@ public class BasicFragment extends Fragment {
         confirmPassword=(EditText)view.findViewById(R.id.confirm_password);
         textView=(TextView)view.findViewById(R.id.spinnerText);
         spinner=(Spinner)view.findViewById(R.id.spinner01);
+        spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                i = identity[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                i=identity[0];
+            }
+        });
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item,BasicFragment.identity);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -107,11 +124,10 @@ public class BasicFragment extends Fragment {
                     String usernameText,passwordText,confirmPasswordText,identity;
                     usernameText=username.getText().toString();
                     passwordText=password.getText().toString();
-                    identity=String.valueOf(textView.getText());
                     confirmPasswordText=confirmPassword.getText().toString();
                     if(passwordText!=null&&passwordText.equals(confirmPasswordText)) {
                         basicListener=(BasicListener)getActivity();
-                        basicListener.onNext(usernameText,passwordText,identity);
+                        basicListener.onNext(usernameText,passwordText,i);
                     }
                     else {
                         password.setText(null);
@@ -124,6 +140,13 @@ public class BasicFragment extends Fragment {
             return true;
         }
     };
+
+    @Override
+    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.next,menu);
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
 
     public static interface BasicListener {
         public void onNext(String username, String password,String identity);

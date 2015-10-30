@@ -6,17 +6,22 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import java.util.ArrayList;
 import android.content.Intent;
+import android.widget.Toast;
+
+import com.daimajia.swipe.SwipeLayout;
 
 
 /**
@@ -104,7 +109,17 @@ public class UserFragment extends Fragment implements SelectThread.ThreadListene
         }
         s=new String[mAllList.size()];
         s=mAllList.toArray(s);
-        listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, s));
+        //listView.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_expandable_list_item_1, mAllList));
+        listView.setAdapter(new NewArrayAdapter<String>(getActivity(),R.layout.list_item,R.id.text_one,mAllList));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(UserFragment.this.getActivity(),"list",Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(getActivity(),QueryActivity.class);
+                intent.putExtra("username",mAllList.get((int)id));
+                startActivity(intent);
+            }
+        });
         showProgress(false);
         searchView.setOnQueryTextListener(this);
         searchView.setSubmitButtonEnabled(false);
@@ -149,7 +164,7 @@ public class UserFragment extends Fragment implements SelectThread.ThreadListene
     }
 
     public void updateLayout(Object[] obj) {
-        listView.setAdapter(new ArrayAdapter<Object>(getActivity(),	android.R.layout.simple_expandable_list_item_1, obj));
+        listView.setAdapter(new NewArrayAdapter<Object>(getActivity(), R.layout.list_item, R.id.text_one, obj));
     }
 
     private Toolbar.OnMenuItemClickListener onMenuItemClickListener = new Toolbar.OnMenuItemClickListener() {
@@ -158,7 +173,7 @@ public class UserFragment extends Fragment implements SelectThread.ThreadListene
             switch (item.getItemId()) {
                 case R.id.action_add:
                     Intent intent=new Intent(getActivity(),AddUserActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent, 0x1001);
                     break;
                 case R.id.action_logout:
 
@@ -170,4 +185,21 @@ public class UserFragment extends Fragment implements SelectThread.ThreadListene
             return true;
         }
     };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==0x1001) {
+            ArrayAdapter<String> adapter=(NewArrayAdapter<String>)(listView.getAdapter());
+            adapter.add(data.getStringExtra("new"));
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    public void deleteUser(String username) {
+        mAllList.remove(username);
+        ArrayAdapter<String> adapter=(NewArrayAdapter<String>)(listView.getAdapter());
+        adapter.notifyDataSetChanged();
+        DeleteUserThread deleteUserThread=new DeleteUserThread(username);
+        deleteUserThread.start();
+    }
 }

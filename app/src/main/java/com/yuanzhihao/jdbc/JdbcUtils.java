@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.sql.Statement;
 
 /**
  * Created by yuanzhihao on 15/10/1.
@@ -23,7 +24,7 @@ public class JdbcUtils {
     private final String driver = "com.mysql.jdbc.Driver";
 
     //数据库地址
-    private final String url = "jdbc:mysql://172.31.218.4:3306/robotics_club";
+    private final String url = "jdbc:mysql://172.31.159.223:3306/robotics_club";
 
     //数据库的连接
     Connection connection;
@@ -87,8 +88,9 @@ public class JdbcUtils {
     public ResultSet selectUserByUsername(String username) {
         connection = this.getConnection();
         try {
-            preparedStatement = connection.prepareStatement("select username,password,identity from user where user.username=?");
+            preparedStatement = connection.prepareStatement("select username,password,identity from user where user.username=? and user.status=?");
             preparedStatement.setString(1, username);
+            preparedStatement.setInt(2,0);
             resultSet = preparedStatement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -99,7 +101,8 @@ public class JdbcUtils {
     public ResultSet selectAllUser() {
         connection=this.getConnection();
         try {
-            preparedStatement = connection.prepareStatement("select username from user");
+            preparedStatement = connection.prepareStatement("select username from user where status=?");
+            preparedStatement.setInt(1,0);
             resultSet = preparedStatement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -137,6 +140,41 @@ public class JdbcUtils {
             preparedStatement=connection.prepareStatement("insert into calendar (date,activity_content) values(?,?)");
             preparedStatement.setString(2,activityContent);
             preparedStatement.setDate(1, date);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insertAdmin(String[] args) {
+        connection=getConnection();
+        try {
+            preparedStatement=connection.prepareStatement("insert into user (username,password,identity) values(?,?,?)",
+                    Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(3, args[2]);
+            preparedStatement.setString(2, args[1]);
+            preparedStatement.setString(1, args[0]);
+            preparedStatement.executeUpdate();
+            resultSet=preparedStatement.getGeneratedKeys();
+            resultSet.next();
+            int id=resultSet.getInt(1);
+            resultSet.close();
+            preparedStatement.close();
+            preparedStatement=connection.prepareStatement("insert into admin (user_id, admin_name) values(?,?)");
+            preparedStatement.setInt(1, id);
+            preparedStatement.setString(2, args[3]);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteUser(String username) {
+        connection=getConnection();
+        try {
+            preparedStatement=connection.prepareStatement("update user set status=? where username=?");
+            preparedStatement.setInt(1,1);
+            preparedStatement.setString(2, username);
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();

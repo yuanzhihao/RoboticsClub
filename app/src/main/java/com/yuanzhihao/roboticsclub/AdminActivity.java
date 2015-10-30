@@ -119,5 +119,11 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         textCalendar.setTextColor(getResources().getColor(R.color.black));
     }
 
+    public Fragment getUserManageFragment() {
+        return userManageFragment;
+    }
 
+    public void setUserManageFragment(Fragment userManageFragment) {
+        this.userManageFragment = userManageFragment;
+    }
 }

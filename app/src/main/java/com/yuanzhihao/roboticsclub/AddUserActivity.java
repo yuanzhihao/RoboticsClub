@@ -22,12 +22,12 @@ public class AddUserActivity extends AppCompatActivity implements BasicFragment.
         initFragment(0);
     }
 
-    @Override
+   /* @Override
     public boolean onCreateOptionsMenu (Menu menu) {
         MenuInflater menuInflater=this.getMenuInflater();
         menuInflater.inflate(R.menu.next, menu);
         return super.onCreateOptionsMenu(menu);
-    }
+    }*/
 
     @Override
     public void onNext(String username, String password, String identity) {
@@ -47,7 +47,7 @@ public class AddUserActivity extends AppCompatActivity implements BasicFragment.
                 break;
             case 1:
                 extendFragment=ExtendFragment.newInstance(username,password,identity);
-                fragmentTransaction.replace(R.id.content, extendFragment);
+                fragmentTransaction.replace(R.id.user_information, extendFragment);
                 fragmentTransaction.show(extendFragment);
                 break;
         }
